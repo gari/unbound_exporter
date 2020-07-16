@@ -1,26 +1,23 @@
 #!/bin/bash
 
-
-docker run -i -v `pwd`:/unbound_exporter gari123/fpm /bin/sh << 'EOF'
-set -ex
-
+rpm_dist=${1:-el7}
 
 VERSION="v0.3"
 RC="1"
+DIR="rpm"
+
+docker run -i -v `pwd`:/unbound_exporter gari123/fpm /bin/sh << EOF
+set -ex
 
 cd /unbound_exporter
-DIR="rpm"
-if [ ! -d "$DIR" ]; then
-    mkdir $DIR
-fi
 
 fpm -s dir -n "unbound_exporter" \
 -p rpm/ \
--v $VERSION \
---iteration $RC \
+-v ${VERSION} \
+--iteration ${RC} \
 -t rpm --rpm-os linux \
 -a x86_64 \
---rpm-dist el7 \
+--rpm-dist ${rpm_dist} \
 --url "https://github.com/gari/unbound_exporter" \
 --license "Apache Software License 2.0" \
 --maintainer "Igor Kozlov igor.kozlov@corp.mail.ru" \
